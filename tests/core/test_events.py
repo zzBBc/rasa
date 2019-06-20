@@ -19,7 +19,6 @@ from rasa.core.events import (
     BotUttered,
     FollowupAction,
     UserUtteranceReverted,
-    AgentUttered,
 )
 
 
@@ -43,10 +42,6 @@ from rasa.core.events import (
         (
             BotUttered("my_text", {"my_data": 1}),
             BotUttered("my_other_test", {"my_other_data": 1}),
-        ),
-        (
-            AgentUttered("my_text", "my_data"),
-            AgentUttered("my_other_test", "my_other_data"),
         ),
         (
             ReminderScheduled("my_action", datetime.now()),
@@ -90,7 +85,6 @@ def test_event_has_proper_implementation(one_event, another_event):
         ActionExecuted("my_action", "policy_1_KerasPolicy", 0.8),
         FollowupAction("my_action"),
         BotUttered("my_text", {"my_data": 1}),
-        AgentUttered("my_text", "my_data"),
         ReminderScheduled("my_action", datetime.now()),
         ReminderScheduled("my_action", datetime.now(pytz.timezone("US/Central"))),
     ],
@@ -220,10 +214,3 @@ def test_json_parse_action():
     evt = {"event": "action", "name": "my_action"}
     # DOCS END
     assert Event.from_parameters(evt) == ActionExecuted("my_action")
-
-
-def test_json_parse_agent():
-    # DOCS MARKER AgentUttered
-    evt = {"event": "agent", "text": "Hey, how are you?"}
-    # DOCS END
-    assert Event.from_parameters(evt) == AgentUttered("Hey, how are you?")
