@@ -28,7 +28,6 @@ The first step is to create a new Rasa project. To do this, run:
 
 
 .. runnable::
-   :language: bash
 
    rasa init --no-prompt
 
@@ -80,7 +79,6 @@ the ``rasa init`` command:
 
 
 .. runnable::
-   :language: bash
 
    cat data/nlu.md
 
@@ -105,7 +103,6 @@ will use. In this example, your NLU model will use the
 Let's take a look at your model configuration file.
 
 .. runnable::
-   :language: bash
 
    cat config.yml
 
@@ -149,7 +146,6 @@ Run the command below to view the example stories inside the file ``data/stories
 
 
 .. runnable::
-   :language: bash
 
    cat data/stories.md
 
@@ -168,7 +164,6 @@ file called ``domain.yml``:
 
 
 .. runnable::
-   :language: bash
 
    cat domain.yml
 
@@ -208,7 +203,6 @@ the training results for each training epoch.
 
 
 .. runnable::
-   :language: bash
 
    rasa train
 
@@ -239,3 +233,6 @@ and improve your assistant:
 .. button::
    :text: Try Rasa X
    :link: ../../rasa-x/
+
+.. juniper::
+   :language: bash

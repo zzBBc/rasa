@@ -1,14 +1,11 @@
 import logging
-import typing
 from typing import Dict, Text
 
 from rasa.constants import DOCS_BASE_URL
+from rasa.core.agent import Agent
 from rasa.cli.utils import minimal_kwargs, print_warning
 
 logger = logging.getLogger(__name__)
-
-if typing.TYPE_CHECKING:
-    from rasa.core.agent import Agent
 
 
 def run(
@@ -55,7 +52,7 @@ def run(
     )
 
 
-def create_agent(model: Text, endpoints: Text = None) -> "Agent":
+def create_agent(model: Text, endpoints: Text = None) -> Agent:
     from rasa.core.tracker_store import TrackerStore
     from rasa.core import broker
     from rasa.core.utils import AvailableEndpoints

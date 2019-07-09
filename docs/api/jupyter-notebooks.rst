@@ -4,18 +4,27 @@ Jupyter Notebooks
 =================
 
 This page contains the most important methods for using Rasa in a Jupyter notebook.
+This interactive tutorial is for Rasa X 0.19.3, which runs on Rasa 1.1.4.
+
+Running asynchronous rasa code requires an extra requirement, since Jupyter Notebooks
+already run on event loops. 
+
+.. runnable::
+
+   import nest_asyncio
+   nest_asyncio.apply()
+
 
 You need to create a project if you don't already have one.
 To do this, run:
 
 .. runnable::
-   :language: python
 
-   from rasa.cli.scaffold import _create_initial_project
+   from rasa.cli.scaffold import create_initial_project
    import os
 
    project = "test-project"
-   _create_initial_project(project)
+   create_initial_project(project)
 
    # move into project directory and show files
    os.chdir(project)
@@ -28,7 +37,6 @@ To define variables that contain these paths, run:
 
 
 .. runnable::
-   :language: python
 
    config = "config.yml"
    training_files = "data/"
@@ -49,10 +57,10 @@ When training has finished, ``rasa.train`` returns the path where the trained mo
 
 
 .. runnable::
-   :language: python
 
    import rasa
 
+   print(config, training_files, domain, output)
    model_path = rasa.train(domain, config, [training_files], output)
    print(model_path)
 
@@ -67,7 +75,6 @@ in the path to your saved model:
 
 
 .. runnable::
-   :language: python
 
    from rasa.jupyter import chat
    chat(model_path)
@@ -80,11 +87,10 @@ Evaluate your model against test data
 Rasa has a convenience function for getting your training data.
 Rasa's ``get_core_nlu_directories`` is a convenience function which
 recursively finds all the stories and nlu data files in a directory,
-and copies them into two directories.
+and copies them into two temporary directories.
 The return values are the paths to these newly created directories.
 
 .. runnable::
-   :language: python
 
    import rasa.data as data
    stories_directory, nlu_data_directory = data.get_core_nlu_directories(training_files)
@@ -97,16 +103,30 @@ to your saved model and directories containing the stories and nlu data
 to evaluate on.
 
 .. runnable::
-   :language: python
 
    rasa.test(model_path, stories_directory, nlu_data_directory)
    print("done testing")
 
 
-The results of the evaluation will be written to a file called ``results``.
-This contains information about the accuracy of your model and other metrics.
+The results of the core evaluation will be written to a file called ``results``.
+NLU errors will be reported to ``errors.json``.
+Together, they contain information about the accuracy of your model's
+predictions and other metrics.
 
 .. runnable::
-   :language: python
 
-   print(open("results").read())
+   if os.path.isfile("errors.json"):
+       print("NLU Errors:")
+       print(open("errors.json").read())
+       print("\n")
+   else:
+       print("No NLU errors.")
+
+   if os.path.isdir("results"):
+       if os.path.isfile("results/failed_stories.md"):
+           print("Core Errors:")
+           print(open("results/failed_stories.md").read())
+           print("\n")
+
+.. juniper::
+  :language: python
